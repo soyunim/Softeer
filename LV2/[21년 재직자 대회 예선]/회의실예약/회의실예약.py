@@ -5,56 +5,45 @@ n, m = map(int, input().split())
 timetable = {}
 
 for i in range(n):
-    timeline = [0,0,0,0,0,0,0,0,0,0]
+    timeline = ["09","10","11","12","13","14","15","16","17","18"]
     timetable[input().rstrip()] = timeline
 
 
 for j in range(m):
     r, s, t = input().split()
-    for i in range(int(s)-9, int(t)-9+1):
-        timetable[r][i]=1
-
+    for i in range(int(s)-9, int(t)-8):
+        timetable[r][i]=" "
 timetable=dict(sorted(timetable.items()))
 
-cnt =0
-for i,j in timetable.items():
+
+cnt = 0
+for i, j in timetable.items():
     cnt=cnt+1
     print("Room "+i+":")
-    start = 0
-    end = 0
-    time_s = []
-    time_e = []
+    result_s = []
+    result_e = []
     for k in range(10):
-        if(k==0 and j[k]==0 and start==0 and end==0):
-            start=1
-            time_s.append(str(k+9))
-        if(k!=0 and j[k]==0 and start==0 and end==0):
-            start=1
-            end=0
-            time_s.append(str(k+8))
-        if(k!=0 and j[k]==0 and start==0 and end==1):
-            start=1
-            end=0
-            time_s.append(str(k+8))
 
-        if(j[k]==1 and start==1):
-            end=1
-            start=0
-            time_e.append(str(k+9))
-        if(k==9 and j[k]==0 and start==1 and end==0):
-            time_e.append(str(k+9));
-    if(len(time_s)==0):
+        #시작이 9
+        if(j[k]!=" " and k==0):
+            result_s.append(j[k])
+        if(j[k]!=" " and k!=0 and j[k-1]==" "):
+            result_s.append(str(int(j[k])-1))
+
+        # 끝이 18
+        if(j[k]!=" " and k==9):
+            result_e.append(j[k])
+        if(j[k]!=" " and k!=9 and j[k+1]==" "):
+            result_e.append(str(int(j[k])+1))
+
+
+    if(len(result_s)==0):
         print("Not available")
     else:
-        print(str(len(time_s))+" available:")
+        print(str(len(result_s))+" available:")
 
-        for l in range(len(time_s)):
-            if(time_s[l]=="9"):
-                time_s[l]="09"
-            if(time_e[l]=="9"):
-                time_e[l]="09"
-            print(str(time_s[l])+"-"+str(time_e[l]))
+    for l in range(len(result_s)):
+        print(result_s[l]+"-"+result_e[l])
 
     if(cnt!=len(timetable)):
         print("-----")
-    
